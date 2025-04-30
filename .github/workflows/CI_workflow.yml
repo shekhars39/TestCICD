@@ -25,8 +25,8 @@ jobs:
       - uses: azure/docker-login@v1
         with:
           login-server: testappreg.azurecr.io
-          username: 'testappreg'
-          password: 'hE339bZYoP9/YDbPVGqO7Bg6SR3bl5TfO8ltfFwv+S+ACRBdgGmr' 
+          username: ${{secrets.USERNAME}}
+          password: ${{secrets.PASSWORD}} 
       - run: |
             docker build . -t testappreg.azurecr.io/gaga:gaga
             docker push testappreg.azurecr.io/gaga:gaga
