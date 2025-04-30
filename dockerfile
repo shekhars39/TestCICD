@@ -18,7 +18,8 @@ RUN R -e "install.packages('rgdal', type='source')"
 RUN R -e "install.packages('pandoc', type='source')"
 RUN R -e "install.packages('flextable', type='source')"
 
-WORKDIR /App
+#Work Dir explicitly set the root directory
+WORKDIR /App 
 COPY . /App /srv/shiny-server/App 
 
 EXPOSE 3838 
