@@ -18,8 +18,8 @@ RUN R -e "install.packages('rgdal', type='source')"
 RUN R -e "install.packages('pandoc', type='source')"
 RUN R -e "install.packages('flextable', type='source')"
 
-
-COPY ./App /srv/shiny-server/App 
+WORKDIR /App
+COPY . /App /srv/shiny-server/App 
 
 EXPOSE 3838 
 
