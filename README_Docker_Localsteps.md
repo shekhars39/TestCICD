@@ -1,4 +1,4 @@
-# GAGA 
+# GAGA Local instance steps
 
 ## Have AZ CLI installed local
 ```bash
