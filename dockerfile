@@ -25,6 +25,3 @@ COPY . /App /srv/shiny-server/App
 EXPOSE 3838 
 
 RUN sudo chown -R shiny:shiny /srv/shiny-server 
-#RUN ["chmod", "+x", "/shiny-server.sh"]
-
-#CMD ["/usr/bin/shiny-server.sh"]
