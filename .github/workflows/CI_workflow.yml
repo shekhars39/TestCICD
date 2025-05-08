@@ -40,15 +40,6 @@ jobs:
             docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gaga:${{ github.sha }}    
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/gaga:${{ github.sha }}
 
-      - name: 'Deploy to Azure Container Instances'                                      #Deploy ACR image to Web App
-        uses: 'azure/aci-deploy@v1'
-        with:
-            resource-group: ${{ secrets.RESOURCE_GROUP }}
-            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/gaga:${{ github.sha }}
-            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            registry-username: ${{ secrets.REGISTRY_UN }}
-            registry-password: ${{ secrets.RESGISTRY_PW }}
-            name: test-webapp-gaga
-            location: 'East US '
+
 
 
