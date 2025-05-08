@@ -22,13 +22,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: azure/docker-login@v1
+      - name: 'Checkout GitHub Action'                                                  #Checkout Github Repository
+        uses: actions/checkout@v4
+
+      - name: 'Login via Azure CLI'                                                     #Login into Azure using service principal
+        uses: azure/login@v1
         with:
-          login-server: testappreg.azurecr.io # set GAGA Container registry - crd0203use001.azurecr.io 
-          username: ${{secrets.REGISTRY_UN}}  # Service principle needs to be created and credentials to be provided
-          password: ${{secrets.RESGISTRY_PW}} # Service principle needs to be created and credentials to be provided
-      - run: |                                                 # set GAGA Container registry - crd0203use001.azurecr.io
-            docker build . -t testappreg.azurecr.io/gaga:gaga    
-            docker push testappreg.azurecr.io/gaga:gaga
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 'Build and push image'                                                     #Build and push docker image to ACR
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}                             # set GAGA Container registry - crd0203use001.azurecr.io 
+          username: ${{secrets.REGISTRY_UN}}                                             # Service principle details
+          password: ${{secrets.RESGISTRY_PW}}                                            # Service principle details
+      - run: |                                                                           # set GAGA Container registry - crd0203use001.azurecr.io
+            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gaga:${{ github.sha }}    
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/gaga:${{ github.sha }}
+
+      - name: 'Deploy to Azure Container Instances'                                      #Deploy ACR image to Web App
+        uses: 'azure/aci-deploy@v1'
+        with:
+            resource-group: ${{ secrets.RESOURCE_GROUP }}
+            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/gaga:${{ github.sha }}
+            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            registry-username: ${{ secrets.REGISTRY_UN }}
+            registry-password: ${{ secrets.RESGISTRY_PW }}
+            name: test-webapp-gaga
+            location: 'East US '
+
 
